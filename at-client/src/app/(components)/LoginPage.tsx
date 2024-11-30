@@ -19,44 +19,62 @@ function LoginPage({}: Props) {
     });
 
     const loginUser = async (e: { preventDefault: () => void; }) => {
-        e.preventDefault()
-        
-    signIn('credentials', {
-        ...data,
-        redirect: false
+      e.preventDefault();
+      
+      signIn('credentials', {
+          ...data,
+          redirect: false
       })
-        .then((callback) => {
+      .then(async (callback) => {
           if (callback?.error) {
-            toast("Wrong credentials, 😞 try again", {
-              duration: 5000,
-              // Styling
-              style: {},
-              className: "",
-    
-              ariaProps: {
-                role: "status",
-                "aria-live": "polite",
-              },
-            })
-            console.log(callback.error)
+              toast("Wrong credentials, 😞 try again", {
+                  duration: 5000,
+                  // Styling
+                  style: {},
+                  className: "",
+                  ariaProps: {
+                      role: "status",
+                      "aria-live": "polite",
+                  },
+              });
+              console.log(callback.error);
           } else if (callback?.ok) {
-            toast("Logged in successfully! 🎊", {
-              duration: 5000,
-              // Styling
-              style: {},
-              className: "",
-    
-              ariaProps: {
-                role: "status",
-                "aria-live": "polite",
-              },
-            })
-            //router.push('/general') 
-            axios.post('/api/check-status',data.email);
+              toast("Logged in successfully! 🎊", {
+                  duration: 5000,
+                  // Styling
+                  style: {},
+                  className: "",
+                  ariaProps: {
+                      role: "status",
+                      "aria-live": "polite",
+                  },
+              });
+  
+              // Make API call to check user status
+              try {
+                  // Add `await` to correctly resolve the Promise
+                  const response = await axios.post('/api/check-status', { email: data.email });
+                  
+                  // Access response data after awaiting
+                  const userStatus = response.data?.user_status;
+  
+                  // Redirect based on user status
+                  if (userStatus === 'rider') {
+                      router.push('/rider');
+                  } else if (userStatus === 'passenger') {
+                      router.push('/passenger');
+                  } else {
+                      // Default redirection or handling if the user status is not found
+                      router.push('/general');
+                  }
+              } catch (error) {
+                  console.error("Error checking user status:", error);
+                  toast("Something went wrong while checking user status.", { duration: 5000 });
+              }
           }
-        })
-    }
-    
+      });
+  };
+  
     
 
   return (
@@ -124,3 +142,4 @@ function LoginPage({}: Props) {
 }
 
 export default LoginPage
+
