@@ -1,6 +1,8 @@
 'use client';
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useSession } from 'next-auth/react';
+
 
 type Props = object;
 
@@ -8,7 +10,13 @@ function PassengerContent({}: Props) {
   const [data, setData] = useState({
     code: '', // The state for the customer code
   });
-  const [confirmation, setConfirmation] = useState<string | null>(null); // State for confirmation message
+  const [confirmation, setConfirmation] = useState<string | null>(null);
+
+  const [points,setPoints] = useState<number | null >(null); // or useState<number>(0)
+
+  const {data:session} = useSession();
+  
+  const current_user_email = session?.user?.email
 
   // Function to send the code to the API route
   async function readandSendCode(e: React.FormEvent) {
@@ -21,6 +29,9 @@ function PassengerContent({}: Props) {
       // If the request is successful, update the confirmation state
       if (response.status === 200) {
         console.log('Code successfully read:', response.data);
+        if(current_user_email){
+          updatePoints(current_user_email);
+        }
         setConfirmation(
           response.data.exists
             ? 'Code Validated 🤩.'
@@ -30,6 +41,19 @@ function PassengerContent({}: Props) {
     } catch (error) {
       console.error('Error sending the code:', error);
       setConfirmation('An error occurred while checking the code. Please try again.');
+    }
+  }
+
+  async function updatePoints(current_user_email:string){
+    try {
+      const response = await axios.post('/api/points-addition', {email: current_user_email});
+  
+      if (response.status === 200) {
+        console.log(response.data.message);
+        setPoints((prev) => (prev || 0) + 10); 
+      }
+    } catch (error) {
+      console.error('Error updating points:', error);
     }
   }
 
@@ -66,6 +90,8 @@ function PassengerContent({}: Props) {
             <p>{confirmation}</p>
           </div>
         )}
+
+        Your current Points Balance is: {points}
       </div>
 
       <div className="image-container md:w-2/3">

@@ -26,15 +26,21 @@ model User {
   email           String               @unique
   hashed_password String
   user_status String
+  airtime_points airtime_points[]
 
 
 }
-
-
 
 
 model generated_codes {
   code_id String @id @default(uuid())
   code    String
   
+}
+
+model airtime_points{
+  transaction_id String @default(uuid())
+  points Int
+  user_id String @id 
+  user User @relation(fields: [user_id],references: [user_id])
 }

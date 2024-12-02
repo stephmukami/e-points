@@ -1,11 +1,13 @@
 'use client'
 import React, { useState } from 'react';
-import axios from 'axios'; // Import axios
+import axios from 'axios'; 
+import { useSession } from 'next-auth/react';
 
 type Props = object;
 
 function RiderContent({}: Props) {
   const [generatedCode, setGeneratedCode] = useState<string | null>(null);
+  const {data:session} = useSession();
 
   // Function to generate and send the code
   async function generateAndSendCode() {
@@ -37,7 +39,7 @@ function RiderContent({}: Props) {
         >
           Generate
         </button>
-
+          <div>session data {session?.user?.name}</div>
         {generatedCode && <h4>Your unique code is: {generatedCode}</h4>}
       </div>
 
