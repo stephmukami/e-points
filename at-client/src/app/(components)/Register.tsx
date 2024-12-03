@@ -17,6 +17,7 @@ function Register({}: Props) {
       first_name: "",
       last_name: "",
       email: "",
+      phone_number: "",
       password: "",
       user_status:""
   
@@ -34,6 +35,7 @@ function Register({}: Props) {
           first_name: "",
           last_name: "",
           email: "",
+          phone_number: "",
           password: "",
           user_status:""
         })
@@ -164,6 +166,27 @@ function Register({}: Props) {
                             setFormInput({
                             ...formInput,
                             email: e.target.value,
+                          })
+                        }
+                        required
+      
+                        />
+                    </div>
+
+                    <div className='mb-4'>
+                        <label htmlFor="last-name">Phone Number </label>
+                    </div>
+
+                    <div className='mb-8 md:w-[370px] '>
+                        <input  className="bg-input-grey md:w-[370px] w-full  rounded-sm h-[32px]" type="email" 
+                        placeholder=" e.g. 0712345678"
+                        id="phone_number"
+                        name="phone_number"
+                        value={formInput.phone_number}
+                        onChange={(e) =>
+                            setFormInput({
+                            ...formInput,
+                            phone_number: e.target.value,
                           })
                         }
                         required

@@ -24,7 +24,7 @@ function Navbar({}: Props) {
         <div className='logo-section  relative right-2  m-2 md:m-0'>
             <Link href="/">
             <div className="logo-section  flex justify-center items-center space-x-6 ">
-                <img width="30" height="30" src="https://img.icons8.com/ios-filled/50/1A1A1A/square-90.png" alt="square-90"/>
+                <img width="30" height="30" src="./nav-logo.png" alt="motorbike"/>
                 <h2 className='text-2xl'>E-Points</h2>
             
             </div> 

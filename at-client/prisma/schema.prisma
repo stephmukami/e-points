@@ -23,6 +23,7 @@ model User {
   user_id         String               @id @default(uuid())
   first_name      String
   last_name       String
+  phone_number String @unique
   email           String               @unique
   hashed_password String
   user_status String
@@ -43,4 +44,5 @@ model airtime_points{
   points Int
   user_id String @id 
   user User @relation(fields: [user_id],references: [user_id])
+  redeemed_airtime Int? 
 }

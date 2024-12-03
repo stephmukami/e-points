@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 
@@ -8,25 +8,25 @@ type Props = object;
 
 function PassengerContent({}: Props) {
   const [data, setData] = useState({
-    code: '', // The state for the customer code
+    code: '', 
   });
   const [confirmation, setConfirmation] = useState<string | null>(null);
 
   const [points,setPoints] = useState<number | null >(null); // or useState<number>(0)
 
   const {data:session} = useSession();
-  
+
   const current_user_email = session?.user?.email
+
+  //->use effect for fetching airtime and points from the backend
 
   // Function to send the code to the API route
   async function readandSendCode(e: React.FormEvent) {
-    e.preventDefault(); // Prevent page refresh on form submission
+    e.preventDefault(); 
 
     try {
-      // Send the code to the API endpoint using Axios
       const response = await axios.post('/api/user-read', { code: data.code });
 
-      // If the request is successful, update the confirmation state
       if (response.status === 200) {
         console.log('Code successfully read:', response.data);
         if(current_user_email){
@@ -50,10 +50,24 @@ function PassengerContent({}: Props) {
   
       if (response.status === 200) {
         console.log(response.data.message);
-        setPoints((prev) => (prev || 0) + 10); 
+        setPoints((prev) => (prev || 0) + 10);  //should this be from state or from the db?
       }
     } catch (error) {
       console.error('Error updating points:', error);
+    }
+  }
+
+  async function redeemPoints(current_user_email:string |undefined|null){
+    if (current_user_email){
+      try{
+        const response = axios.post('/api/pts-airtime',{email:current_user_email});
+        console.log(response);
+          //toast to confirm points redemption
+
+      }catch(error){
+        console.error('Error in redeeming points',error);
+      }
+
     }
   }
 
@@ -90,8 +104,16 @@ function PassengerContent({}: Props) {
             <p>{confirmation}</p>
           </div>
         )}
-
+        <p>
         Your current Points Balance is: {points}
+        </p>
+        <p> You can redeem your points for airtime, 5 points can send 5 Ksh of airtime </p> {/*change to 10 pts for airtime */}
+        {/*can add a type assertion but it is not safe ie <button onClick={()=> redeemPoints(current_user_email!)} className="bg-black text-white w-[140px] h-[36px] rounded-md">Redeem Airtime</button>
+ */}
+        <button onClick={()=> redeemPoints(current_user_email)} className="bg-black text-white w-[140px] h-[36px] rounded-md">Redeem Airtime</button>
+
+        <p>The amount of airtime you have redeemed </p>
+
       </div>
 
       <div className="image-container md:w-2/3">

@@ -11,7 +11,7 @@ function HomeContent({}: Props) {
 
       <div className="flex-col-one  md:w-[450px] mb-4 md:mb-0 md:p-0 p-2">
         <h1 className='font-bold text-3xl mb-[50px]'>
-          Championing effecient transport sustainably.
+          Championing effecient and sustainable transport.
         </h1>
 
         <h3 className='font-light mb-6'>
@@ -22,13 +22,13 @@ function HomeContent({}: Props) {
 
             <div className="home-btns flex  space-x-6 font-bold mb-10">
               <Link href = "#how-it-works">
-              <button className='  w-[140px] h-[36px] bg-brand-green rounded-md hover:bg-brand-orange'>How it Works</button>
+              <button className='  w-[140px] h-[36px] bg-brand-orange rounded-md hover:bg-brand-green'>How it Works</button>
 
               </Link>
 
 
               <Link href = "/register">
-              <button className='w-[140px] h-[36px] rounded-md bg-brand-green hover:bg-brand-orange'>Register</button>
+              <button className='w-[140px] h-[36px] rounded-md bg-brand-orange hover:bg-brand-green'>Register</button>
 
               </Link>
             </div>
