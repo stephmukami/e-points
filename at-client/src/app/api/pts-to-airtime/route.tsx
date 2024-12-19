@@ -14,7 +14,9 @@ const credentials = {
     apiKey : process.env.API_KEY as string,
     username: process.env.USERNAME as string,
 }
-const airtime = africastalking(credentials).AIRTIME 
+const airtime = africastalking(credentials).
+
+
 
 async function sendAirtime(phoneNumber:number,airtimeAmount:number){ //fetch phone numer form email in db call first
     const options = {
