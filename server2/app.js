@@ -1,40 +1,51 @@
-// Set your app credentials
-require('dotenv').config();
+require("dotenv").config();
 
-const credentials = {
-  apiKey: process.env.API_KEY,
-  username: process.env.USERNAME,
-}
+const express = require('express');
+const createError = require("http-errors");
+const path = require('path');
+const methodOverride = require("method-override");
+const morgan = require('morgan');  // Require morgan for logging
 
-// Initialize the SDK
-const AfricasTalking = require('africastalking')(credentials);
+const app = express();
 
-// Get the airtime service
-const airtime = AfricasTalking.AIRTIME;
+const cors = require('cors');
+app.use(cors());
 
 
-function sendAirtime() {
-  const options = {
-      maxNumRetry: 3, // Will retry the transaction every 60seconds for the next 3 hours.
-      recipients: [{
-          phoneNumber: "+254797645137",
-          currencyCode: "KES",
-          amount: "10"
-      }]
-  };
+const port = parseInt(process.env.PORT) || process.argv[3] || 8080;
 
-  // That’s it hit send and we’ll take care of the rest
-  airtime.send(options)
-      .then(response => {
-          console.log(response);
-      }).catch(error => {
-          //console.log(error);
-          console.log("API Key:", credentials.apiKey);
-console.log("Username:", credentials.username);
-      });
-}
+// Middleware
+app.use(methodOverride('_method', { methods: ['POST', 'GET'] }));
+app.use(morgan("dev"));  // Use morgan for logging
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
 
-sendAirtime();
+// View engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
-console.log("API Key:", credentials.apiKey);
-console.log("Username:", credentials.username);
+// Accessing modular routes
+const airtimeRouter = require("./routes/airtime");
+app.use("/api/send-airtime", airtimeRouter);
+
+// Error handling
+// 404 page
+app.use(function(req, res, next) {
+  next(createError(404));
+});
+
+// Error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(err.status || 500);
+  res.json({
+    message: err.message,
+    error: process.env.NODE_ENV === 'development' ? err : {}
+  });
+});
+
+// Start server
+app.listen(port, () => {
+  console.log(`Listening on http://localhost:${port}`);
+});

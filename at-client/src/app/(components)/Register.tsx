@@ -178,7 +178,7 @@ function Register({}: Props) {
                     </div>
 
                     <div className='mb-8 md:w-[370px] '>
-                        <input  className="bg-input-grey md:w-[370px] w-full  rounded-sm h-[32px]" type="email" 
+                        <input  className="bg-input-grey md:w-[370px] w-full  rounded-sm h-[32px]" type="text" 
                         placeholder=" e.g. 0712345678"
                         id="phone_number"
                         name="phone_number"

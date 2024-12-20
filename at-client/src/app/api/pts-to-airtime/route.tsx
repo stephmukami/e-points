@@ -1,82 +1,75 @@
 import { prisma } from '@/app/lib/prisma';
 import { NextRequest, NextResponse } from 'next/server';
-import africastalking from 'africastalking';
-import dotenv from "dotenv";
+import axios from 'axios';
 // access the db when one taps the button to redeem airtime
 
 // confirm the balance of points then send the post request to the at api
 
-dotenv.config();
-const conversionAmount:number = 5;
-const airtimeAmount: number=5;
 
-const credentials = {
-    apiKey : process.env.API_KEY as string,
-    username: process.env.USERNAME as string,
-}
-const airtime = africastalking(credentials).
-
-
-
-async function sendAirtime(phoneNumber:number,airtimeAmount:number){ //fetch phone numer form email in db call first
-    const options = {
-        recepients:[
-            {
-                phoneNumber,
-                airtimeAmount,
-                currencyCode: 'KES'
-            }
-        ]
-    };
-    try{
-        const response = await airtime.send(options);
-        console.log("Airtime sent", response);
-        return {success: true,response}; //might have to return as a next response 
-    }catch(error){
-        console.error('Error sending airtime',error);
-        return {success:false,error};
-    }
-
-}
+const conversionAmount:number = 1
+const airtimeAmount: string = "5";
 
 export async function POST(request: NextRequest) {
-    const { email,phoneNumber} = await request.json();
+    const { email} = await request.json();
 
 
-    if (!email || !phoneNumber) {
-        throw new Error ("email and phone number required ");
+    if (!email) {
+        throw new Error ("email is required ");
     }
 
     try {
 
-        const user = await prisma.user.findUnique({where:{email}});
-        if (!user){
-          console.error('user not found',email);
-          return NextResponse.json({error:'User not found'},{status:404});
+        const user = await prisma.user.findUnique({
+            where:{email},
+            select:{phone_number:true,user_id:true},
+        });
+        
+        if(!user || !user.phone_number){
+            return NextResponse.json({error:"User not found"},{status:404});
         }
+        //find the phone number by email
         //confirm if the points are enough then invoke the api logic
         const userPoints = await prisma.airtime_points.findUnique({
             where:{user_id:user.user_id},
             select:{points:true},
         });
 
-        if (!userPoints || userPoints < conversionAmount){
+        if (!userPoints || userPoints.points < conversionAmount){
             return NextResponse.json({error: 'Insufficient points for airtime conversion'});
         }
         //const amount = airtime.points; //confirm if the points are mapped to the correct user and if this is needed
-        const sendResponse = await sendAirtime(phoneNumber,airtimeAmount);
+  
+        // const sendResponse = await sendAirtime(user.phone_number,airtimeAmount);
+        let formattedNumber = user.phone_number;
+            if (user.phone_number.startsWith("07")) {
+                formattedNumber = "+254" + user.phone_number.slice(1);
+            }
 
-        if(! sendResponse.success){
-            return NextResponse.json({error:'error in sending airtime',details : sendResponse.error},{status:500});
-        }
+        const sendResponse = await axios.post('http://localhost:8080/api/send-airtime', {
+            phoneNumber: formattedNumber,
+            airtimeAmount: airtimeAmount,
+          });
 
+          const { errorMessage, responses } = sendResponse.data;//should they be read too
+
+        // if(!success){
+        //     return NextResponse.json({error:'error in sending airtime',details : error},{status:500});
+        // }
+
+        if (errorMessage === 'None' && responses[0]?.status === 'Sent') {
         //reducing the amount of user points
         await prisma.airtime_points.update({
             where:{user_id:user.user_id},
             data:{points:{decrement:conversionAmount}}
         });
 
-        return NextResponse.json({success:true,message:'Airtime sent successfully',details:sendResponse.response})
+        return NextResponse.json({success:true,message:'Airtime sent successfully',details:sendResponse.data})
+
+        }
+        return NextResponse.json({error:'error in sending airtime',details : errorMessage},{status:500});
+
+    
+
 }
   
     catch(error) {

@@ -42,7 +42,7 @@ function HomeContent({}: Props) {
 
 
                     <div className='flex items-center space-x-2 '>
-                    <h3 className="">Be a part of a greener future</h3>
+                    <h3 className="">Be part of a greener future</h3>
                     <img width="30" height="30" src="https://img.icons8.com/ios-filled/50/1A1A1A/long-arrow-right.png" alt="long-arrow-right"/>
                     </div> 
                 </strong>
