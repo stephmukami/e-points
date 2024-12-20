@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
             data:{points:{decrement:conversionAmount}}
         });
 
-        return NextResponse.json({success:true,message:'Airtime sent successfully',details:sendResponse.data})
+        return NextResponse.json({success:true,message:'Airtime sent successfully',details:sendResponse.data},{status:200})
 
         }
         return NextResponse.json({error:'error in sending airtime',details : errorMessage},{status:500});

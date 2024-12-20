@@ -13,7 +13,7 @@ function PassengerContent({}: Props) {
   const [confirmation, setConfirmation] = useState<string | null>(null);
   // const [current_user_email, setCurrentUserEmail] = useState<string | null>(null);
 
-  const [points,setPoints] = useState<number | null >(null); // or useState<number>(0)
+  const [redeemConfirmation,setredeemConfirmation] = useState<string | null >(null); // or useState<number>(0)
 
   const {data:session} = useSession();
   const current_user_email = session?.user?.email;
@@ -55,10 +55,6 @@ function PassengerContent({}: Props) {
     try {
       const response = await axios.post('/api/points-addition', {email: current_user_email});
   
-      if (response.status === 200) {
-        console.log(response.data.message);
-        setPoints((prev) => (prev || 0) + 10);  //should be from db, use state shd fetch points balance,and airtime redeemed then update state so it always reads updated info from db
-      }
     } catch (error) {
       console.error('Error updating points:', error);
     }
@@ -68,7 +64,14 @@ function PassengerContent({}: Props) {
     if (current_user_email){
       try{
         console.log("making api request with the email:", current_user_email);
-        const response = axios.post('/api/pts-to-airtime',{email:current_user_email});
+        const response = await axios.post('/api/pts-to-airtime',{email:current_user_email});
+        
+        if(response.status===200){
+          setredeemConfirmation("Points successfully redeemed!")
+        }else{
+          setredeemConfirmation("Failed to redeem points,please try again.")
+          console.error("Error in redeeming points",response.data);
+        }
         console.log(response);
 
       }catch(error){
@@ -113,16 +116,18 @@ function PassengerContent({}: Props) {
               <p>{confirmation}</p>
             </div>
           )}
-          <p>
-          Your current Points Balance is: {points}
-          </p>
-          <p> You can redeem your points for airtime, 5 points can send 5 Ksh of airtime </p> {/*change to 10 pts for airtime */}
+      
+          <p className="mb-4"> You can redeem your points for airtime 🤩 <br /> 1 point can send 5 Ksh of airtime </p> {/*change to 10 pts for airtime */}
           {/*can add a type assertion but it is not safe ie <button onClick={()=> redeemPoints(current_user_email!)} className="bg-black text-white w-[140px] h-[36px] rounded-md">Redeem Airtime</button>
    */}
-          <button onClick={()=> redeemPoints(current_user_email)} className="bg-black text-white w-[140px] h-[36px] rounded-md">Redeem Airtime</button>
+          <button onClick={()=> redeemPoints(current_user_email)} className="mb-2 bg-black text-white w-[140px] h-[36px] rounded-md">Redeem Airtime</button>
   
-          <p>The amount of airtime you have redeemed </p>
-  
+          {redeemConfirmation && (
+            <div className="mt-4 text-purple-600">
+              <p>{redeemConfirmation}</p>
+            </div>
+          )}
+
         </div>
         ) :(
           <div className=' p-10 w-[600px] text-2xl font-semibold text-center'> Please Login </div>

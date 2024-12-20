@@ -16,11 +16,9 @@ const airtime = AfricasTalking.AIRTIME;
 async function sendAirtime(req,res,next) {
     try{
         const {phoneNumber,airtimeAmount} = req.body;
-        console.log("phone number is ",phoneNumber);
-        console.log("airtime amout is ",airtimeAmount);
-
+      
         const options = {
-            maxNumRetry: 3, // Will retry the transaction every 60seconds for the next 3 hours.
+            maxNumRetry: 3, 
             recipients: [{
                 phoneNumber,
                 currencyCode: "KES",
@@ -28,7 +26,6 @@ async function sendAirtime(req,res,next) {
             }]
         };
       
-        // That’s it hit send and we’ll take care of the rest
         airtime.send(options)
             .then(response => {
                 console.log(response);
