@@ -6,7 +6,6 @@ import "./globals.css";
 
 import ToasterContext from "./context/ToasterContext";
 import AuthProvider from "./context/AuthContext";
-import { FormProvider } from "./context/FormContext";
 
 
 const instrumentSans = localFont({
@@ -31,10 +30,8 @@ export default function RootLayout({
         className={`${instrumentSans.variable}  antialiased`}
       >
         <AuthProvider>
-          <FormProvider>
             <ToasterContext/>
                 {children}
-          </FormProvider>
         </AuthProvider>
       </body>
     </html>

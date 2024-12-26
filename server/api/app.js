@@ -26,7 +26,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // Accessing modular routes
-const airtimeRouter = require("./routes/airtime");
+const airtimeRouter = require("../routes/airtime");
 app.use("/api/send-airtime", airtimeRouter);
 
 // Error handling
