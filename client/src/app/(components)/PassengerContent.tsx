@@ -21,11 +21,6 @@ function PassengerContent({}: Props) {
 
   //->use effect for fetching airtime and points from the backend
 
-  // useEffect(()=>{
-  //   if (!session) return;
-  //   const email = session?.user?.email;
-  //   setCurrentUserEmail(email)
-  // },[session])
 
   // Function to send the code to the API route
   async function readandSendCode(e: React.FormEvent) {
@@ -101,7 +96,7 @@ function PassengerContent({}: Props) {
                 type="text"
                 value={data.code}
                 onChange={(e) =>
-                  setData({ ...data, code: e.target.value }) // Update code in state
+                  setData({ ...data, code: e.target.value }) 
                 }
                 required
               />
@@ -117,7 +112,7 @@ function PassengerContent({}: Props) {
             </div>
           )}
       
-          <p className="mb-4"> You can redeem your points for airtime 🤩 <br /> 1 point can send 5 Ksh of airtime </p> {/*change to 10 pts for airtime */}
+          <p className="mb-4"> You can redeem your points for airtime 🤩 <br /> 1 point can send 5 Ksh of airtime </p> 
           {/*can add a type assertion but it is not safe ie <button onClick={()=> redeemPoints(current_user_email!)} className="bg-black text-white w-[140px] h-[36px] rounded-md">Redeem Airtime</button>
    */}
           <button onClick={()=> redeemPoints(current_user_email)} className="mb-2 bg-black text-white w-[140px] h-[36px] rounded-md">Redeem Airtime</button>

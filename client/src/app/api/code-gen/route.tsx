@@ -1,6 +1,5 @@
 
 
-
 import {prisma} from '@/app/lib/prisma'
 
 import { NextResponse, NextRequest } from 'next/server'
@@ -13,7 +12,7 @@ export async function POST(request: NextRequest){
         const savedCode = await prisma.generated_codes.create({
             data: { code: code },
           });
-          await prisma.$disconnect(); // Disconnect Prisma client after handling the request
+          await prisma.$disconnect(); 
           return NextResponse.json(savedCode)
   
     } catch (error) {

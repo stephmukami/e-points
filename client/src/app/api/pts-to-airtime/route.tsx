@@ -52,9 +52,7 @@ export async function POST(request: NextRequest) {
 
           const { errorMessage, responses } = sendResponse.data;//should they be read too
 
-        // if(!success){
-        //     return NextResponse.json({error:'error in sending airtime',details : error},{status:500});
-        // }
+      
 
         if (errorMessage === 'None' && responses[0]?.status === 'Sent') {
         //reducing the amount of user points
@@ -80,4 +78,3 @@ export async function POST(request: NextRequest) {
 
 
 
-//fetch amount of airtime redeemed 
