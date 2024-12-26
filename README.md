@@ -4,6 +4,7 @@
   E-Points
   <br>
 </h1>
+<img src="https://github.com/stephmukami/e-points/blob/main/client/public/epoints-pic-home.PNG" alt="home page pic">
 
 <h4 align="center">A reward based web application for incentivizing use of Electric Motorbikes.</h4>
 <p align="center">
