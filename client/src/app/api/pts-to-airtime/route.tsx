@@ -44,8 +44,9 @@ export async function POST(request: NextRequest) {
             if (user.phone_number.startsWith("07")) {
                 formattedNumber = "+254" + user.phone_number.slice(1);
             }
-
-        const sendResponse = await axios.post('http://localhost:8080/api/send-airtime', {
+//prev - >'http://localhost:8080/api/send-airtime'
+//current -> https://e-points.onrender.com/api/send-airtime
+        const sendResponse = await axios.post('https://e-points.onrender.com/api/send-airtime', {
             phoneNumber: formattedNumber,
             airtimeAmount: airtimeAmount,
           });

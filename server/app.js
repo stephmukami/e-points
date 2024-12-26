@@ -25,6 +25,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.get("/api/epoints", (req, res) => {
+  res.json({"msg": " you are successfully accessing epoints "});
+});
+
+
+
 // Accessing modular routes
 const airtimeRouter = require("./routes/airtime");
 app.use("/api/send-airtime", airtimeRouter);
