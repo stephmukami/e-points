@@ -4,6 +4,7 @@
   E-Points
   <br>
 </h1>
+<img src="https://github.com/stephmukami/e-points/blob/main/client/public/epoints-pic-home.PNG" alt="home page pic">
 
 <h4 align="center">A reward based web application for incentivizing use of Electric Motorbikes.</h4>
 <p align="center">
@@ -41,7 +42,38 @@
   
 * Intergration
   -  Africa's Talking API: Enables seamless airtime distribution when users redeem their points
+### Folder Structure
 
+```plaintext
+talking-africa/
+├── client/src/
+│   ├── app/
+│   │   ├── (components)/ - renders the different pages e.g home page,code generation page
+│   │   │   ├── PassengerContent.tsx
+│   │   │   └── ...
+│   │   ├── (hooks)/ - manages side effects and lifecycle features
+│   │   │   └── useSession.ts
+│   │   ├── (pages)/
+│   │   │   ├── index.tsx
+│   │   │   ├── _app.tsx
+│   │   │   ├── _document.tsx
+│   │   │   └── ...
+│   │   ├── api/ - handle requests and responses for resources
+│   │   │   └── auth/
+|   |   |   └── ...
+│   │   ├── (styles)/ - global.css
+│   │   │   
+│   ├── public/ - images
+│   │   
+│   ├── page.tsx
+│   |── .gitignore
+├── server/ - backend for Africa's Talking API
+│   ├── app.js
+│   ├── tests/
+│   │   └── api.test.js
+│   
+└── README.md
+```
 ## How To Use
 
 To clone and run this application, you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
