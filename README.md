@@ -71,9 +71,8 @@ talking-africa/
 │   ├── app.js
 │   ├── tests/
 │   │   └── api.test.js
-│   └── ...
-
-└── ...
+│   
+└── README.md
 ```
 ## How To Use
 
